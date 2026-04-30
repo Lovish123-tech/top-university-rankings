@@ -173,7 +173,7 @@ git log --pretty=format:'%h : %s' --graph > git-log.txt
 ## Useful Links
 - GitHub repository: https://github.com/Lovish123-tech/top-university-rankings.git
 - Render deployment: https://top-university-rankings.onrender.com
-- Open Data Information: [Open Data Guide](http://theodi.org/guides/what-open-data)
+- Open Data Information: [Kaggle.com](https://www.kaggle.com)
 - Render documentation: [Render Docs](https://render.com/docs)
 - Render deploys: [Deploying on Render](https://render.com/docs/deploys)
 
