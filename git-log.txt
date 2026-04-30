@@ -1,0 +1,4 @@
+* c1356a7 : Update README
+* a788307 : Update stats page
+* b1c9a71 : Add gitignore and remove venv from tracking
+* ef0e65c : Initial commit
