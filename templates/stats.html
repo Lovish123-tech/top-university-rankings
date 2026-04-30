@@ -1,71 +1,199 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Statistics</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistics - Top University Rankings</title>
     <style>
         body {
-            font-family: Arial;
-            background-color: #f4f6f9;
-            margin: 40px;
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            margin: 0;
+            padding: 0;
+            color: #222;
         }
 
         .container {
+            max-width: 1100px;
+            margin: 40px auto;
             background: white;
-            padding: 20px;
-            border-radius: 10px;
-            width: 800px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            padding: 30px;
+            border-radius: 14px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
         }
 
         h1 {
-            color: #333;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 42px;
+            color: #222;
+        }
+
+        .intro {
+            font-size: 17px;
+            color: #555;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 25px;
+            color: #0d6efd;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .summary-card {
+            background: #f8f9fb;
+            border-left: 5px solid #0d6efd;
+            padding: 18px;
+            border-radius: 10px;
+        }
+
+        .summary-card h3 {
+            margin: 0 0 8px 0;
+            font-size: 16px;
+            color: #444;
+        }
+
+        .summary-card p {
+            margin: 0;
+            font-size: 28px;
+            font-weight: bold;
+            color: #111;
+        }
+
+        .section-title {
+            margin-top: 10px;
+            margin-bottom: 15px;
+            font-size: 24px;
+            color: #222;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
         }
 
         th {
-            background-color: #007bff;
+            background: #0d6efd;
             color: white;
-            padding: 10px;
         }
 
-        td {
-            padding: 8px;
-            text-align: center;
-            border-bottom: 1px solid #ddd;
+        tr:hover {
+            background: #f8f9fa;
         }
 
-        a {
-            text-decoration: none;
-            color: #007bff;
-            font-weight: bold;
+        .note {
+            margin-top: 20px;
+            font-size: 15px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px;
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 30px;
+            }
+
+            .intro {
+                font-size: 15px;
+            }
+
+            th, td {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            .summary-card p {
+                font-size: 22px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Top 10 Countries by Number of Universities</h1>
-        <a href="/">Back to Home</a>
+        <h1>University Statistics</h1>
+
+        <p class="intro">
+            This page gives a summary of the university rankings dataset.
+            It highlights the countries with the highest number of universities
+            and provides more context for the overall data shown in the application.
+        </p>
+
+        <a href="/" class="back-link">← Back to Home</a>
+
+        <div class="summary-grid">
+            <div class="summary-card">
+                <h3>Top Country</h3>
+                <p>{{ top_country }}</p>
+            </div>
+
+            <div class="summary-card">
+                <h3>Universities in Top Country</h3>
+                <p>{{ top_total }}</p>
+            </div>
+
+            <div class="summary-card">
+                <h3>Total Universities</h3>
+                <p>{{ total_universities }}</p>
+            </div>
+
+            <div class="summary-card">
+                <h3>Total Countries</h3>
+                <p>{{ total_countries }}</p>
+            </div>
+        </div>
+
+        <h2 class="section-title">Top 10 Countries by Number of Universities</h2>
 
         <table>
-            <tr>
-                <th>Rank</th>
-                <th>Country</th>
-                <th>Total Universities</th>
-            </tr>
-
-            {% for row in data %}
-            <tr>
-                <td>{{ loop.index }}</td>
-                <td>{{ row["country"] }}</td>
-                <td>{{ row["total"] }}</td>
-            </tr>
-            {% endfor %}
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Country</th>
+                    <th>Total Universities</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in data %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ row.country }}</td>
+                    <td>{{ row.total }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
         </table>
+
+        <p class="note">
+            The table shows which countries appear most often in the rankings dataset.
+            This helps place individual universities in a wider international context.
+        </p>
     </div>
 </body>
 </html>

@@ -137,9 +137,27 @@ def stats():
         """
     ).fetchall()
 
+    total_countries = conn.execute(
+        "SELECT COUNT(*) FROM countries"
+    ).fetchone()[0]
+
+    total_universities = conn.execute(
+        "SELECT COUNT(*) FROM universities"
+    ).fetchone()[0]
+
     conn.close()
 
-    return render_template("stats.html", data=data)
+    top_country = data[0]["country"] if data else ""
+    top_total = data[0]["total"] if data else 0
+
+    return render_template(
+        "stats.html",
+        data=data,
+        top_country=top_country,
+        top_total=top_total,
+        total_countries=total_countries,
+        total_universities=total_universities
+    )
 
 
 @app.errorhandler(404)
