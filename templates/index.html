@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Top University Rankings</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f6f9;
+            margin: 40px;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 1100px;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .nav-links {
+            margin-bottom: 15px;
+        }
+
+        .nav-links a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        input, select, button {
+            padding: 6px;
+            margin-right: 5px;
+            margin-bottom: 8px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th {
+            background: #007bff;
+            color: white;
+            padding: 10px;
+        }
+
+        td {
+            padding: 8px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .pagination {
+            margin-top: 20px;
+        }
+
+        .pagination a {
+            margin-right: 12px;
+            font-weight: bold;
+        }
+
+        .message {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .current-page {
+            font-weight: bold;
+            margin: 0 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Top University Rankings</h1>
+
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/stats">View Statistics</a>
+        </div>
+
+        <form method="GET" action="/">
+            <input type="text" name="search" placeholder="University name" value="{{ search }}">
+
+            <select name="year">
+                <option value="">All Years</option>
+                {% for y in years %}
+                    <option value="{{ y['year'] }}" {% if selected_year == y['year']|string %}selected{% endif %}>
+                        {{ y['year'] }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <select name="country">
+                <option value="">All Countries</option>
+                {% for c in countries %}
+                    <option value="{{ c['country'] }}" {% if selected_country == c['country'] %}selected{% endif %}>
+                        {{ c['country'] }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <button type="submit">Filter</button>
+        </form>
+
+        {% if total > 0 %}
+            <p>Showing {{ start_num }} - {{ end_num }} of {{ total }}</p>
+
+            <table>
+                <tr>
+                    <th>Rank</th>
+                    <th>University</th>
+                    <th>Country</th>
+                    <th>Score</th>
+                    <th>Year</th>
+                </tr>
+
+                {% for uni in universities %}
+                <tr>
+                    <td>{{ uni['rank'] }}</td>
+                    <td><a href="/university/{{ uni['institution'] }}">{{ uni['institution'] }}</a></td>
+                    <td>{{ uni['country'] }}</td>
+                    <td>{{ uni['score'] }}</td>
+                    <td>{{ uni['year'] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p class="message">No results found.</p>
+        {% endif %}
+
+        <div class="pagination">
+            {% if page > 1 %}
+                <a href="/?page=1&search={{ search }}&year={{ selected_year }}&country={{ selected_country }}">First</a>
+                <a href="/?page={{ page - 1 }}&search={{ search }}&year={{ selected_year }}&country={{ selected_country }}">Prev</a>
+            {% endif %}
+
+            <span class="current-page">Page {{ page }} of {{ total_pages }}</span>
+
+            {% if page < total_pages %}
+                <a href="/?page={{ page + 1 }}&search={{ search }}&year={{ selected_year }}&country={{ selected_country }}">Next</a>
+                <a href="/?page={{ total_pages }}&search={{ search }}&year={{ selected_year }}&country={{ selected_country }}">Last</a>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
