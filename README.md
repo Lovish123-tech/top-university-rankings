@@ -3,7 +3,7 @@
 ## Overview
 This project is a database-driven Flask web application that presents top university ranking data using a SQLite database. Users can browse universities, search by name, filter by year and country, view detailed information for an individual university, and explore summary statistics by country.
 
-The application was developed for the CS551P Advanced Programming assessment. It uses open data, Flask, SQLite, HTML, and CSS, and it does not use JavaScript in order to comply with the coursework requirements. [file:94]
+The application was developed for the CS551P Advanced Programming assessment. It uses open data, Flask, SQLite, HTML, and CSS, and it does not use JavaScript in order to comply with the coursework requirements. 
 
 ## Features
 - View university rankings with pagination
@@ -136,7 +136,7 @@ gunicorn app:app
 ### Live deployment
 - Render URL: https://top-university-rankings.onrender.com
 
-Render supports automatic deployment when changes are pushed to the connected Git repository. [web:73]
+Render supports automatic deployment when changes are pushed to the connected Git repository. 
 
 ## Maintenance
 The following steps can be used to maintain or update the project:
@@ -161,7 +161,7 @@ requirements.txt
 ```
 
 ### Redeploy the application
-Push the latest code to GitHub and allow Render to redeploy automatically, or trigger a manual deploy from the Render dashboard. Render documents both automatic and manual deploy options. [web:73][web:142]
+Push the latest code to GitHub and allow Render to redeploy automatically, or trigger a manual deploy from the Render dashboard. Render documents both automatic and manual deploy options. 
 
 ## Git and Version Control
 Git was used during development for source control. The coursework also requires a Git log file generated with:
