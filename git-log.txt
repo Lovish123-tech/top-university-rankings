@@ -1,3 +1,8 @@
+* 675d50a : Add 5 new tests: detail, year, pagination, empty search, edge case 404
+* 0e78277 : Add 500 error handler, try/except DB calls, and Config class
+* 784cb35 : Add base.html with block inheritance, CSS styling, and 500 error page
+* a6096ae : Update README
+* 283cc98 : Add git log file
 * c1356a7 : Update README
 * a788307 : Update stats page
 * b1c9a71 : Add gitignore and remove venv from tracking
