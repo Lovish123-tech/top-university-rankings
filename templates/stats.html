@@ -1,182 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Statistics - Top University Rankings</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f6f9;
-            margin: 0;
-            padding: 0;
-            color: #222;
-        }
+{% extends "base.html" %}
+{% block title %}Statistics - University Rankings{% endblock %}
 
-        .container {
-            max-width: 1100px;
-            margin: 40px auto;
-            background: white;
-            padding: 30px;
-            border-radius: 14px;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-        }
+{% block content %}
+<section class="page-header">
+    <h1>Statistics</h1>
+    <p class="page-subtitle">Country-level analysis of the university rankings dataset.</p>
+</section>
 
-        h1 {
-            margin-top: 0;
-            margin-bottom: 10px;
-            font-size: 42px;
-            color: #222;
-        }
-
-        .intro {
-            font-size: 17px;
-            color: #555;
-            margin-bottom: 25px;
-            line-height: 1.6;
-        }
-
-        .back-link {
-            display: inline-block;
-            margin-bottom: 25px;
-            color: #0d6efd;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .back-link:hover {
-            text-decoration: underline;
-        }
-
-        .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 16px;
-            margin-bottom: 30px;
-        }
-
-        .summary-card {
-            background: #f8f9fb;
-            border-left: 5px solid #0d6efd;
-            padding: 18px;
-            border-radius: 10px;
-        }
-
-        .summary-card h3 {
-            margin: 0 0 8px 0;
-            font-size: 16px;
-            color: #444;
-        }
-
-        .summary-card p {
-            margin: 0;
-            font-size: 28px;
-            font-weight: bold;
-            color: #111;
-        }
-
-        .section-title {
-            margin-top: 10px;
-            margin-bottom: 15px;
-            font-size: 24px;
-            color: #222;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-
-        th, td {
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
-            text-align: center;
-        }
-
-        th {
-            background: #0d6efd;
-            color: white;
-        }
-
-        tr:hover {
-            background: #f8f9fa;
-        }
-
-        .note {
-            margin-top: 20px;
-            font-size: 15px;
-            color: #666;
-            line-height: 1.5;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                margin: 20px;
-                padding: 20px;
-            }
-
-            h1 {
-                font-size: 30px;
-            }
-
-            .intro {
-                font-size: 15px;
-            }
-
-            th, td {
-                font-size: 14px;
-                padding: 10px;
-            }
-
-            .summary-card p {
-                font-size: 22px;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>University Statistics</h1>
-
-        <p class="intro">
-            This page gives a summary of the university rankings dataset.
-            It highlights the countries with the highest number of universities
-            and provides more context for the overall data shown in the application.
-        </p>
-
-        <a href="/" class="back-link">← Back to Home</a>
-
-        <div class="summary-grid">
-            <div class="summary-card">
-                <h3>Top Country</h3>
-                <p>{{ top_country }}</p>
-            </div>
-
-            <div class="summary-card">
-                <h3>Universities in Top Country</h3>
-                <p>{{ top_total }}</p>
-            </div>
-
-            <div class="summary-card">
-                <h3>Total Universities</h3>
-                <p>{{ total_universities }}</p>
-            </div>
-
-            <div class="summary-card">
-                <h3>Total Countries</h3>
-                <p>{{ total_countries }}</p>
-            </div>
+<section class="stats-summary">
+    <div class="kpi-grid">
+        <div class="kpi-card">
+            <span class="kpi-value">{{ total_universities }}</span>
+            <span class="kpi-label">Total Rankings</span>
         </div>
+        <div class="kpi-card">
+            <span class="kpi-value">{{ total_countries }}</span>
+            <span class="kpi-label">Countries Represented</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-value">{{ top_country }}</span>
+            <span class="kpi-label">Top Country</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-value">{{ top_total }}</span>
+            <span class="kpi-label">Rankings for Top Country</span>
+        </div>
+    </div>
+</section>
 
-        <h2 class="section-title">Top 10 Countries by Number of Universities</h2>
+<section class="chart-section">
+    <h2>Top 10 Countries by Number of University Rankings</h2>
 
-        <table>
+    {% set max_total = data[0].total if data else 1 %}
+    <div class="bar-chart">
+        {% for row in data %}
+        <div class="bar-row">
+            <span class="bar-label">{{ row.country }}</span>
+            <div class="bar-track">
+                <div class="bar-fill" style="width: {{ (row.total / max_total * 100) | int }}%"></div>
+            </div>
+            <span class="bar-value">{{ row.total }}</span>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="table-wrapper" style="margin-top: 2rem;">
+        <table class="data-table">
             <thead>
                 <tr>
-                    <th>Rank</th>
+                    <th>#</th>
                     <th>Country</th>
-                    <th>Total Universities</th>
+                    <th>Total Rankings</th>
                 </tr>
             </thead>
             <tbody>
@@ -184,16 +58,11 @@
                 <tr>
                     <td>{{ loop.index }}</td>
                     <td>{{ row.country }}</td>
-                    <td>{{ row.total }}</td>
+                    <td><strong>{{ row.total }}</strong></td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-
-        <p class="note">
-            The table shows which countries appear most often in the rankings dataset.
-            This helps place individual universities in a wider international context.
-        </p>
     </div>
-</body>
-</html>
+</section>
+{% endblock %}

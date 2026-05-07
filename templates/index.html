@@ -1,169 +1,96 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Top University Rankings</title>
-    <style>
-        body {
-            font-family: Arial;
-            background: #f4f6f9;
-            margin: 40px;
-        }
+{% extends "base.html" %}
+{% block title %}Home – Top University Rankings{% endblock %}
 
-        .container {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            width: 1100px;
-        }
+{% block content %}
+<section class="page-header">
+    <h1>Top University Rankings</h1>
+    <p class="page-subtitle">Browse, search and filter world university rankings from the CWUR dataset.</p>
+</section>
 
-        h1 {
-            margin-bottom: 10px;
-        }
-
-        .nav-links {
-            margin-bottom: 15px;
-        }
-
-        .nav-links a {
-            color: #007bff;
-            text-decoration: none;
-            font-weight: bold;
-            margin-right: 15px;
-        }
-
-        form {
-            margin-bottom: 20px;
-        }
-
-        input, select, button {
-            padding: 6px;
-            margin-right: 5px;
-            margin-bottom: 8px;
-        }
-
-        button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-
-        th {
-            background: #007bff;
-            color: white;
-            padding: 10px;
-        }
-
-        td {
-            padding: 8px;
-            text-align: center;
-            border-bottom: 1px solid #ddd;
-        }
-
-        a {
-            color: #007bff;
-            text-decoration: none;
-        }
-
-        .pagination {
-            margin-top: 20px;
-        }
-
-        .pagination a {
-            margin-right: 12px;
-            font-weight: bold;
-        }
-
-        .message {
-            margin-top: 15px;
-            font-weight: bold;
-        }
-
-        .current-page {
-            font-weight: bold;
-            margin: 0 8px;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Top University Rankings</h1>
-
-        <div class="nav-links">
-            <a href="/">Home</a>
-            <a href="/stats">View Statistics</a>
+<section class="filters-section">
+    <form method="GET" action="/" class="filters-form">
+        <div class="filter-group">
+            <label for="search">Search by Name</label>
+            <input type="text" id="search" name="search" value="{{ search }}" placeholder="e.g. Harvard, Oxford...">
         </div>
-
-        <form method="GET" action="/">
-            <input type="text" name="search" placeholder="University name" value="{{ search }}">
-
-            <select name="year">
+        <div class="filter-group">
+            <label for="year">Filter by Year</label>
+            <select id="year" name="year">
                 <option value="">All Years</option>
                 {% for y in years %}
-                    <option value="{{ y['year'] }}" {% if selected_year == y['year']|string %}selected{% endif %}>
-                        {{ y['year'] }}
-                    </option>
+                    <option value="{{ y.year }}" {% if selected_year == y.year|string %}selected{% endif %}>{{ y.year }}</option>
                 {% endfor %}
             </select>
-
-            <select name="country">
+        </div>
+        <div class="filter-group">
+            <label for="country">Filter by Country</label>
+            <select id="country" name="country">
                 <option value="">All Countries</option>
                 {% for c in countries %}
-                    <option value="{{ c['country'] }}" {% if selected_country == c['country'] %}selected{% endif %}>
-                        {{ c['country'] }}
-                    </option>
+                    <option value="{{ c.country }}" {% if selected_country == c.country %}selected{% endif %}>{{ c.country }}</option>
                 {% endfor %}
             </select>
+        </div>
+        <div class="filter-actions">
+            <button type="submit" class="btn btn-primary">Apply Filters</button>
+            <a href="/" class="btn btn-secondary">Reset</a>
+        </div>
+    </form>
+</section>
 
-            <button type="submit">Filter</button>
-        </form>
+{% if total > 0 %}
+<section class="results-section">
+    <p class="results-info">Showing <strong>{{ start_num }}–{{ end_num }}</strong> of <strong>{{ total }}</strong> results</p>
 
-        {% if total > 0 %}
-            <p>Showing {{ start_num }} - {{ end_num }} of {{ total }}</p>
-
-            <table>
+    <div class="table-wrapper">
+        <table class="data-table">
+            <thead>
                 <tr>
                     <th>Rank</th>
-                    <th>University</th>
+                    <th>Institution</th>
                     <th>Country</th>
                     <th>Score</th>
                     <th>Year</th>
+                    <th>Details</th>
                 </tr>
-
+            </thead>
+            <tbody>
                 {% for uni in universities %}
                 <tr>
-                    <td>{{ uni['rank'] }}</td>
-                    <td><a href="/university/{{ uni['institution'] }}">{{ uni['institution'] }}</a></td>
-                    <td>{{ uni['country'] }}</td>
-                    <td>{{ uni['score'] }}</td>
-                    <td>{{ uni['year'] }}</td>
+                    <td class="rank-cell">#{{ uni.rank }}</td>
+                    <td class="institution-cell">{{ uni.institution }}</td>
+                    <td>{{ uni.country }}</td>
+                    <td class="score-cell">{{ uni.score }}</td>
+                    <td>{{ uni.year }}</td>
+                    <td><a href="/university/{{ uni.institution }}" class="detail-link">View</a></td>
                 </tr>
                 {% endfor %}
-            </table>
+            </tbody>
+        </table>
+    </div>
+
+    <nav class="pagination" aria-label="Page navigation">
+        {% if page > 1 %}
+            <a href="?page={{ page - 1 }}&search={{ search }}&year={{ selected_year }}&country={{ selected_country }}" class="page-btn">&laquo; Previous</a>
         {% else %}
-            <p class="message">No results found.</p>
+            <span class="page-btn disabled">&laquo; Previous</span>
         {% endif %}
 
-        <div class="pagination">
-            {% if page > 1 %}
-                <a href="/?page=1&search={{ search }}&year={{ selected_year }}&country={{ selected_country }}">First</a>
-                <a href="/?page={{ page - 1 }}&search={{ search }}&year={{ selected_year }}&country={{ selected_country }}">Prev</a>
-            {% endif %}
+        <span class="page-info">Page {{ page }} of {{ total_pages }}</span>
 
-            <span class="current-page">Page {{ page }} of {{ total_pages }}</span>
-
-            {% if page < total_pages %}
-                <a href="/?page={{ page + 1 }}&search={{ search }}&year={{ selected_year }}&country={{ selected_country }}">Next</a>
-                <a href="/?page={{ total_pages }}&search={{ search }}&year={{ selected_year }}&country={{ selected_country }}">Last</a>
-            {% endif %}
-        </div>
-    </div>
-</body>
-</html>
+        {% if page < total_pages %}
+            <a href="?page={{ page + 1 }}&search={{ search }}&year={{ selected_year }}&country={{ selected_country }}" class="page-btn">Next &raquo;</a>
+        {% else %}
+            <span class="page-btn disabled">Next &raquo;</span>
+        {% endif %}
+    </nav>
+</section>
+{% else %}
+<section class="empty-state">
+    <p class="empty-icon">&#128269;</p>
+    <h2>No results found</h2>
+    <p>Try adjusting your search or filters.</p>
+    <a href="/" class="btn btn-primary">Clear Filters</a>
+</section>
+{% endif %}
+{% endblock %}
