@@ -369,7 +369,7 @@ button { cursor: pointer; background: none; border: none; font: inherit; }
     letter-spacing: 0.08em;
 }
 
-/* ===== CSS BAR CHART — NO JAVASCRIPT ===== */
+/* ===== CSS BAR CHART ===== */
 .chart-section { margin-top: var(--space-8); }
 .chart-section h2 {
     font-size: var(--text-sm);
